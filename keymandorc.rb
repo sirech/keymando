@@ -1,5 +1,9 @@
 start_at_login(true)
-map "<Ctrl-Shift-R>" { reload }
+
+## Global bindings
+map "<Cmd-Shift-l>" { lock_screen }
+
+## Helpers
 
 def unbind(key, *modifiers)
   return if modifiers.empty? or key.size != 1
