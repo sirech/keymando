@@ -1,0 +1,3 @@
+[submodule "keymando/plugins/growl"]
+	path = keymando/plugins/growl
+	url = git://github.com/keymando/growl
