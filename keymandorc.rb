@@ -19,3 +19,11 @@ only /iTerm/ do
     map "<Ctrl-Shift-#{key}>", "<Cmd-#{key}>"
   end
 end
+
+## Remap bindings in the form Cmd-letter to Ctrl-letter for apps that
+## don't use emacs-style bindings
+except /iTerm/, /Emacs/, /Quicksilver/, /Xcode/ do
+  ('a'..'z').to_a.each do |key|
+    map "<Ctrl-#{key}>", "<Cmd-#{key}>"
+  end
+end
