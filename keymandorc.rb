@@ -1,5 +1,8 @@
 start_at_login(true)
 
+# use growl as the default notifier instead of alert dialogs
+MessageBoard.change_notifier_to(GrowlNotifier)
+
 ## Global bindings
 map "<Ctrl-Shift-r>" do reload end
 map "<Cmd-Shift-l>" do lock_screen end
