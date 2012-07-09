@@ -1,7 +1,8 @@
 start_at_login(true)
 
 ## Global bindings
-map "<Cmd-Shift-l>" { lock_screen }
+map "<Ctrl-Shift-r>" do reload end
+map "<Cmd-Shift-l>" do lock_screen end
 
 ## Helpers
 
