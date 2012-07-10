@@ -1,14 +1,76 @@
 require 'rexml/document'
 
-class XCode # < Plugin
+class XCode < Plugin
 
   @file = 'emacs.idekeybindings'
   @path = '~/Library/Developer/Xcode/UserData/KeyBindings'
 
-  class << self ; attr_accessor :file, :path; end
+  @incremental_search = false
 
+  class << self
+    attr_reader :file, :path
+    attr_accessor :incremental_search
+  end
+
+  def start_incremental_search
+    remap 'findNext:', '<Ctrl-s>'
+    remap 'findPrevious:', '<Ctrl-r>'
+    XCode.incremental_search = true
+    send(@bindings['find:'])
+  end
+
+  def stop_incremental_search
+    remap 'find:', '<Ctrl-s>', '<Ctrl-r>'
+    XCode.incremental_search = false
+  end
+
+  
   def after
-    bindings_hash(find_keys(parse))
+    @f = File.new(File.join(File.dirname(__FILE__), 'import.log'), 'w')
+    @bindings = bindings_hash(find_keys(parse))
+
+    only /Xcode/ do
+      ## XCode Menu
+      remap 'terminate:', '<Ctrl-x><Ctrl-c>'
+
+      ## File Menu
+      remap 'newTab:', '<Ctrl-x>c'
+      remap 'openDocument:', '<Ctrl-x><Ctrl-f>'
+      remap 'openQuickly:', '<Ctrl-Shift-t>'
+
+      # XCode won't cooperate
+      map '<Ctrl-x>k', '<Cmd-Ctrl-w>' # Close doc (other close remaps too)
+      map '<Ctrl-x><Ctrl-s>', '<Cmd-s>' # Save
+      map '<Ctrl-x>s', '<Cmd-Option-s>' # Save all
+      map '<Ctrl-x><Ctrl-s>', '<Cmd-s>' # Save
+
+      ## Edit Menu
+      remap 'undo:', '<Ctrl-/>'
+      # TODO: cut, copy, paste
+      remap 'selectAll:', '<Ctrl-x>h'
+
+      # TODO: fix incremental search clusterfuck
+      remap 'find:', '<Ctrl-s>'
+      # ['s', 'r'].each do |key|
+      #   map "<Ctrl-#{key}>" do
+      #     start_incremental_search
+      #   end
+      # end
+
+      # map '<Ctrl-Shift-s>' do
+      #   stop_incremental_search
+      # end
+
+      # map '<Ctrl-g>' do
+      #   stop_incremental_search
+      #   send('<Escape>')
+      # end
+
+      ## View Menu
+
+      ## Navigate Menu
+    end
+    
   end
 
   private
@@ -33,10 +95,11 @@ class XCode # < Plugin
   # ~ -> Option
   # ^ -> Ctrl
   # @ -> Cmd
+  # $ -> Shift
   def convert_shortcut binding
     return nil if binding.nil?
     chars = binding.strip.split('').map do |c|
-      c.sub(/\^/, 'Ctrl').sub(/~/, 'Option').sub(/@/, 'Cmd')
+      c.downcase.sub(/\^/, 'Ctrl').sub(/~/, 'Option').sub(/@/, 'Cmd').sub(/\$/, 'Shift')
     end
     "<#{chars.join('-')}>"
   end
@@ -46,6 +109,11 @@ class XCode # < Plugin
   end
 
   def bindings_hash xml_keys
-    Hash[xml_keys.map {|elem| xml_to_hash elem}.map { |h| action_key_pair h}]
+    Hash[xml_keys.map {|elem| xml_to_hash elem}.map { |h| action_key_pair(h).tap {|a| @f.write "Imported: #{a}\n"} }]
+  end
+
+  def remap(action, *keys)
+    @f.write "Not found: '#{action}'" unless @bindings.key? action
+    keys.each { |key| map key, @bindings[action] }
   end
 end
