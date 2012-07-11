@@ -40,9 +40,8 @@ class XCode < Plugin
 
       # XCode won't cooperate
       map '<Ctrl-x>k', '<Cmd-Ctrl-w>' # Close doc (other close remaps too)
-      map '<Ctrl-x><Ctrl-s>', '<Cmd-s>' # Save
-      map '<Ctrl-x>s', '<Cmd-Option-s>' # Save all
-      map '<Ctrl-x><Ctrl-s>', '<Cmd-s>' # Save
+      map '<Ctrl-x><Ctrl-s>', '<Cmd-;>' # Save
+      map '<Ctrl-x>s', '<Cmd-Option-;>' # Save all
 
       ## Edit Menu
       remap 'undo:', '<Ctrl-/>'
@@ -61,6 +60,7 @@ class XCode < Plugin
       #   stop_incremental_search
       # end
 
+      map '<Ctrl-g>', '<Escape>'
       # map '<Ctrl-g>' do
       #   stop_incremental_search
       #   send('<Escape>')
@@ -69,6 +69,24 @@ class XCode < Plugin
       ## View Menu
 
       ## Navigate Menu
+
+      ## Window Menu
+      remap 'selectNextTab:', '<Ctrl-x>n'
+      remap 'selectPreviousTab:', '<Ctrl-x>p'
+
+      ## Text Menu
+      # TODO: read from file
+      map '<Ctrl-x>[', '<Option-Up>' # Go: File start
+      map '<Ctrl-x>]', '<Option-Down>' # Go: File end
+      map '<Cmd-b>', '<Option-Left>' # Backward word
+      map '<Cmd-f>', '<Option-Right>' # Forward word
+      map '<Cmd-t>', '<Cmd-Option-t>' # Transpose words
+
+      map '<Cmd-w>' do
+        send '<Option-Shift-y>' # Select to mark
+        send '<Option-c>' # Copy
+      end
+      map '<Ctrl-x><Ctrl-k>', '<Option-Shift-u>' # Delete to mark
     end
     
   end
