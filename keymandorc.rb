@@ -41,7 +41,7 @@ only /Chrome/ do
   controlify (1..9).to_a
 
   # remap some functions to Ctrl-letter
-  controlify ['l', 'n', 't', 'w', 'c', 'v', 'x', 'r']
+  controlify ['a', 'l', 'n', 't', 'w', 'c', 'v', 'x', 'r']
 
   # Emacs style cancel
   map '<Ctrl-g>', '<Escape>'
