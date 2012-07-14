@@ -53,6 +53,6 @@ end
 
 ## Remap bindings in the form Cmd-letter to Ctrl-letter for apps that
 ## don't use emacs-style bindings
-except /iTerm/, /Emacs/, /Quicksilver/, /Xcode/, /Chrome/ do
+except /iTerm/, /Emacs/, /Quicksilver/, /Xcode/, /Chrome/, /Eclipse/ do
   controlify ('a'..'z').to_a
 end
