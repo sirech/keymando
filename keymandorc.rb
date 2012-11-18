@@ -29,6 +29,10 @@ only /iTerm/ do
     unbind key, 'Cmd'
   end
 
+  # Emacs style forward/backward word
+  map '<Cmd-b>', '<Option-b>'
+  map '<Cmd-f>', '<Option-f>'
+
   # Copy/Paste
   ['c', 'v'].each do |key|
     map "<Ctrl-Shift-#{key}>", "<Cmd-#{key}>"
